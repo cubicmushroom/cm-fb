@@ -84,6 +84,14 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin -
 # Clear out /var/www/html
 RUN rm -rf /var/www/html/*
 
+# MySQL/MariaDB/etc
+
+RUN apt-get -y install mysql-server
+RUN mysql_install_db > /dev/null 2>&1
+ADD mysqld_charset.cnf /etc/mysql/conf.d/mysqld_charset.cnf
+
+# !!!This leaves NO ROOT PASSWORD FOR MYSQL!!!
+
 # Install Symfony App
 ## RUN composer create-project symfony/framework-standard-edition /var/www/html 2.5.*
 ## RUN cd /var/www/html && composer install
@@ -111,6 +119,7 @@ RUN sed -i -e "s/DocumentRoot \/var\/www\/html/DocumentRoot \/var\/www\/html\/we
 # 
 
 EXPOSE 80
+EXPOSE 3306
 EXPOSE 6082
 EXPOSE 8080
 

@@ -83,14 +83,20 @@ RUN rm -rf /var/www/html/*
 ## Cannot rename "/var/www/html/app/cache/dev" to "/var/www/html/app/cache/dev_old". 
 ## but it looks like a permission error...
 ## 
-## So: here's an example pulling a tarball
-# These can also be RUN curl -o for retrieval
-ADD http://ftp.drupal.org/files/projects/drupal-7.28.tar.gz /var/www/html/drupal-7.28.tar.gz
-RUN cd /var/www/html/ && tar xvf drupal-7.28.tar.gz && rm drupal-7.28.tar.gz
-## RUN mv /var/www/html/drupal-7.28/* ..
-## RUN mv /var/www/html/drupal-7.28/.htaccess ..
-## RUN rmdir /var/www/html/drupal-7.28
-RUN chown -R www-data:www-data /var/www/html/drupal-7.28
+
+# Install Flexion Discover Component
+#RUN git archive --remote=git@bitbucket.org:cubicmushroom/flexion-discovery-component.git --format=gz --output="/var/www/html/flexion-discovery-component.tar.gz" staging
+RUN curl --digest --user cubicmushroom:<password> https://bitbucket.org/cubicmushroom/flexion-discovery-component/get/staging.gz -Lo /var/www/html/flexion-discovery-component.tar.gz
+RUN cd /var/www/html && tar xvf flexion-discovery-component.tar.gz && rm flexion-discovery-component.tar.gz
+RUN cd /var/www/html && sudo cp -R cubicmushroom-flexion-discovery-component-*/. /var/www/html && rm -Rf cubicmushroom-flexion-discovery-component-*
+
+## Run composer manually (or using the setup.sh script
+RUN cd /var/www/html && composer install --no-scripts
+
+RUN chown -R www-data:www-data /var/www/html
+
+# Change apache default site directory
+RUN sed -i -e "s/DocumentRoot \/var\/www\/html/DocumentRoot \/var\/www\/html\/web/g" /etc/apache2/sites-available/000-default.conf
 
 # 
 EXPOSE 22

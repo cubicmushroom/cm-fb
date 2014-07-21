@@ -46,8 +46,10 @@ ENV APACHE_RUN_GROUP www-data
 ENV APACHE_LOG_DIR /var/log/apache2
 
 # Change default port 80 to 8080
-RUN sed -i -e "s/80/8080/g" /etc/apache2/sites-available/000-default.conf
 RUN sed -i -e "s/80/8080/g" /etc/apache2/ports.conf
+## RUN sed -i -e "s/80/8080/g" /etc/apache2/sites-available/000-default.conf
+ADD ./000-default.conf /etc/apache2/sites-available/000-default.conf
+RUN sudo a2enmod rewrite
 
 # Varnish config
 # http://symfony.com/doc/current/cookbook/cache/varnish.html
@@ -123,4 +125,4 @@ EXPOSE 3306
 EXPOSE 6082
 EXPOSE 8080
 
-CMD ["/usr/bin/supervisord"]
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]

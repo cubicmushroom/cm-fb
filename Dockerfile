@@ -11,6 +11,7 @@ RUN ln -sf /bin/true /sbin/initctl
 ENV DEBIAN_FRONTEND noninteractive
 
 # Housekeeping
+RUN apt-get clean
 RUN apt-get update
 RUN apt-get -y upgrade
 
@@ -23,14 +24,21 @@ RUN apt-get -y install php5-curl php5-gd php5-intl php-pear php5-imagick php5-im
 # Symfony
 RUN apt-get -y install php5-gd php5-intl
 
+# Don't start Varnish after install, leave that to supervisord
+RUN echo '#!/bin/sh\nexit 101' > usr/sbin/policy-rc.d
+RUN sudo chmod +x /usr/sbin/policy-rc.d
+
 # Varnish
 RUN apt-get install -y varnish
+
+# Undo the above
+RUN rm /usr/sbin/policy-rc.d
 
 # Supervisor
 RUN apt-get install -y supervisor
 
 # SSHD
-RUN mkdir /var/run/sshd
+# RUN mkdir /var/run/sshd
 
 # Apache2 config
 ENV APACHE_RUN_USER www-data
@@ -85,13 +93,15 @@ RUN rm -rf /var/www/html/*
 ## 
 
 # Install Flexion Discover Component
-#RUN git archive --remote=git@bitbucket.org:cubicmushroom/flexion-discovery-component.git --format=gz --output="/var/www/html/flexion-discovery-component.tar.gz" staging
-RUN curl --digest --user cubicmushroom:<password> https://bitbucket.org/cubicmushroom/flexion-discovery-component/get/staging.gz -Lo /var/www/html/flexion-discovery-component.tar.gz
-RUN cd /var/www/html && tar xvf flexion-discovery-component.tar.gz && rm flexion-discovery-component.tar.gz
-RUN cd /var/www/html && sudo cp -R cubicmushroom-flexion-discovery-component-*/. /var/www/html && rm -Rf cubicmushroom-flexion-discovery-component-*
+# RUN git archive --remote=git@bitbucket.org:cubicmushroom/flexion-discovery-component.git --format=gz --output="/var/www/html/flexion-discovery-component.tar.gz" staging
+# Edited out by Jak for Testing:
+### RUN curl --digest --user cubicmushroom:<password> https://bitbucket.org/cubicmushroom/flexion-discovery-component/get/staging.gz -Lo /var/www/html/flexion-discovery-component.tar.gz
+### RUN cd /var/www/html && tar xvf flexion-discovery-component.tar.gz && rm flexion-discovery-component.tar.gz
+### RUN cd /var/www/html && sudo cp -R cubicmushroom-flexion-discovery-component-*/. /var/www/html && rm -Rf cubicmushroom-flexion-discovery-component-*
 
 ## Run composer manually (or using the setup.sh script
-RUN cd /var/www/html && composer install --no-scripts
+### RUN cd /var/www/html && composer install --no-scripts
+# EOEdited
 
 RUN chown -R www-data:www-data /var/www/html
 
@@ -99,7 +109,7 @@ RUN chown -R www-data:www-data /var/www/html
 RUN sed -i -e "s/DocumentRoot \/var\/www\/html/DocumentRoot \/var\/www\/html\/web/g" /etc/apache2/sites-available/000-default.conf
 
 # 
-EXPOSE 22
+
 EXPOSE 80
 EXPOSE 6082
 EXPOSE 8080

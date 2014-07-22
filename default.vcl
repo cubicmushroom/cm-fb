@@ -36,6 +36,13 @@ sub vcl_fetch {
     }
 }
 
+sub vcl_fetch {
+  if (req.url !~ "^/gallery/*") {
+    unset beresp.http.set-cookie;
+    unset req.http.Cookie;
+  }
+}
+
 sub vcl_recv {
     if (req.http.X-Forwarded-Proto == "https" ) {
         set req.http.X-Forwarded-Port = "443";
@@ -79,5 +86,12 @@ sub vcl_miss {
     if (req.request == "PURGE") {
         // Indicate that the object isn't stored in cache
         error 404 "Not purged";
+    }
+}
+
+// App specific filters
+sub vcl_recv {
+    if (req.url ~ "^/(admin/*|track/*)") {
+        return(pass);
     }
 }

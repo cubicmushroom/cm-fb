@@ -105,12 +105,12 @@ ADD mysqld_charset.cnf /etc/mysql/conf.d/mysqld_charset.cnf
 # Install Flexion Discover Component
 # RUN git archive --remote=git@bitbucket.org:cubicmushroom/flexion-discovery-component.git --format=gz --output="/var/www/html/flexion-discovery-component.tar.gz" staging
 # Edited out by Jak for Testing:
-### RUN curl --digest --user cubicmushroom:<password> https://bitbucket.org/cubicmushroom/flexion-discovery-component/get/staging.gz -Lo /var/www/html/flexion-discovery-component.tar.gz
-### RUN cd /var/www/html && tar xvf flexion-discovery-component.tar.gz && rm flexion-discovery-component.tar.gz
-### RUN cd /var/www/html && sudo cp -R cubicmushroom-flexion-discovery-component-*/. /var/www/html && rm -Rf cubicmushroom-flexion-discovery-component-*
+RUN curl --digest --user cubicmushroom:<password> https://bitbucket.org/cubicmushroom/flexion-discovery-component/get/staging.gz -Lo /var/www/html/flexion-discovery-component.tar.gz
+RUN cd /var/www/html && tar xvf flexion-discovery-component.tar.gz && rm flexion-discovery-component.tar.gz
+RUN cd /var/www/html && sudo cp -R cubicmushroom-flexion-discovery-component-*/. /var/www/html && rm -Rf cubicmushroom-flexion-discovery-component-*
 
 ## Run composer manually (or using the setup.sh script
-### RUN cd /var/www/html && composer install --no-scripts
+RUN cd /var/www/html && composer install --no-scripts
 # EOEdited
 
 RUN chown -R www-data:www-data /var/www/html

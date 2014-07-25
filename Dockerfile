@@ -115,9 +115,6 @@ ADD mysqld_charset.cnf /etc/mysql/conf.d/mysqld_charset.cnf
 
 RUN chown -R www-data:www-data /var/www/html
 
-# Change apache default site directory
-RUN sed -i -e "s/DocumentRoot \/var\/www\/html/DocumentRoot \/var\/www\/html\/web/g" /etc/apache2/sites-available/000-default.conf
-
 # 
 
 EXPOSE 80

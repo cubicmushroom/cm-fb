@@ -23,7 +23,7 @@ ADD ./default.vcl /etc/varnish/vcl/default.vcl
 ADD ./varnish /etc/default/varnish
 
 ENV VARNISH_BACKEND_PORT 80
-ENV VARNISH_BACKEND_IP 172.17.42.1
+ENV VARNISH_BACKEND_IP 127.0.0.1
 ENV VARNISH_PORT 80
 
 # Clear out /var/www/html

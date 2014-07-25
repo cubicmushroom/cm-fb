@@ -1,4 +1,4 @@
-FROM ubuntu:14.04
+FROM cubicmushroom/apache_varnish
 
 # As per https://github.com/dotcloud/docker/issues/1024
 # This is intended as a temporary workaround but is pending

@@ -19,7 +19,7 @@ RUN apt-get -y upgrade
 ADD ./000-default.conf /etc/apache2/sites-available/000-default.conf
 
 # Varnish config
-ADD ./default.vcl /etc/varnish/vcl/default.vcl
+ADD ./default.vcl /etc/varnish/default.vcl
 ADD ./varnish /etc/default/varnish
 
 ENV VARNISH_BACKEND_PORT 80

@@ -31,7 +31,7 @@ RUN rm -rf /var/www/html/*
 
 # Install Flexion Discover Component
 # RUN git archive --remote=git@bitbucket.org:cubicmushroom/flexion-discovery-component.git --format=gz --output="/var/www/html/flexion-discovery-component.tar.gz" staging
-RUN curl --digest --user cubicmushroom:<password> https://bitbucket.org/cubicmushroom/flexion-discovery-component/get/staging.gz -Lo /var/www/html/flexion-discovery-component.tar.gz
+RUN curl --digest --user cubicmushroom:<change:password> https://bitbucket.org/cubicmushroom/flexion-discovery-component/get/staging.gz -Lo /var/www/html/flexion-discovery-component.tar.gz
 RUN cd /var/www/html && tar xvf flexion-discovery-component.tar.gz && rm flexion-discovery-component.tar.gz
 RUN cd /var/www/html && sudo cp -R cubicmushroom-flexion-discovery-component-*/. /var/www/html && rm -Rf cubicmushroom-flexion-discovery-component-*
 

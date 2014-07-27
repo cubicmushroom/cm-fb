@@ -85,7 +85,7 @@ sub vcl_miss {
     // Match PURGE request
     if (req.request == "PURGE") {
         // Indicate that the object isn't stored in cache
-        error 404 "Not purged";
+        error 200 "Not purged";
     }
 }
 

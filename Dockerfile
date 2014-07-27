@@ -35,6 +35,11 @@ RUN curl --digest --user cubicmushroom:<change:password> https://bitbucket.org/c
 RUN cd /var/www/html && tar xvf flexion-discovery-component.tar.gz && rm flexion-discovery-component.tar.gz
 RUN cd /var/www/html && sudo cp -R cubicmushroom-flexion-discovery-component-*/. /var/www/html && rm -Rf cubicmushroom-flexion-discovery-component-*
 
+RUN mysql -e "CREATE DATABASE flexion"
+RUN mysql -e "CREATE USER 'flexion'@'localhost' IDENTIFIED BY '<change:password>';"
+RUN mysql -e "GRANT ALL PRIVILEGES ON flexion.* TO 'flexion'@'localhost';"
+RUN mysql -e "FLUSH PRIVILEGES;"
+
 ## Run composer manually (or using the setup.sh script
 RUN cd /var/www/html && composer install --no-scripts
 
